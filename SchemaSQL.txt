@@ -1,0 +1,162 @@
+CREATE DATABASE IF NOT EXISTS ProductSklad;
+USE ProductSklad;
+
+CREATE TABLE Suppliers (
+    supplier_id INT NOT NULL,
+    company_name CHAR(255) NOT NULL,
+    contact CHAR(255),
+    phone CHAR(20),
+    supplier_key CHAR(255) NOT NULL UNIQUE,
+    PRIMARY KEY (supplier_id)
+);
+
+CREATE TABLE Supplies (
+    supply_id INT NOT NULL,
+    supplier_id INT NOT NULL,
+    name CHAR(50) NOT NULL,
+    total_price FLOAT NOT NULL,
+    PRIMARY KEY (supply_id),
+    FOREIGN KEY (supplier_id) REFERENCES Suppliers(supplier_id)
+);
+
+CREATE TABLE Supply_items (
+    supply_item_id INT NOT NULL,
+    supply_id INT NOT NULL,
+    name CHAR(255) NOT NULL,
+    price FLOAT,
+    counter INT NOT NULL,
+    type INT,
+    production_date DATE NOT NULL,
+    overdue_date DATE,
+    PRIMARY KEY (supply_item_id),
+    FOREIGN KEY (supply_id) REFERENCES Supplies(supply_id)
+);
+
+CREATE TABLE Storages (
+    storage_id INT NOT NULL,
+    valid_product_types INT NOT NULL,
+    storage_capacity FLOAT NOT NULL,
+    storage_max_capacity FLOAT NOT NULL,
+    PRIMARY KEY (storage_id)
+);
+
+CREATE TABLE Products (
+    product_id INT NOT NULL,
+    supply_item_id INT NOT NULL,
+    storage_id INT NOT NULL,
+    name CHAR(255) NOT NULL,
+    counter INT NOT NULL,
+    type INT,
+    price FLOAT,
+    production_date DATE NOT NULL,
+    receipt_date DATE NOT NULL,
+    overdue_date DATE,
+    PRIMARY KEY (product_id),
+    FOREIGN KEY (supply_item_id) REFERENCES Supply_items(supply_item_id),
+    FOREIGN KEY (storage_id) REFERENCES Storages(storage_id)
+);
+
+CREATE TABLE Clients (
+    client_id INT NOT NULL,
+    name CHAR(255) NOT NULL,
+    contact CHAR(255),
+    phone CHAR(20),
+    address CHAR(255),
+    client_key CHAR(255) NOT NULL,
+    PRIMARY KEY (client_id),
+    UNIQUE KEY (client_key)
+);
+
+CREATE TABLE Orders (
+    order_id INT NOT NULL,
+    client_id INT NOT NULL,
+    name CHAR(255) NOT NULL,
+    PRIMARY KEY (order_id),
+    FOREIGN KEY (client_id) REFERENCES Clients(client_id)
+);
+
+CREATE TABLE Customers (
+    order_item_id INT NOT NULL,
+    product_id INT NOT NULL,
+    order_id INT NOT NULL,
+    counter INT NOT NULL,
+    price FLOAT NOT NULL,
+    PRIMARY KEY (order_item_id),
+    FOREIGN KEY (product_id) REFERENCES Products(product_id),
+    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+);
+
+CREATE TABLE Product (
+    product_id int NOT NULL,
+    supply_item_id int NOT NULL,
+    storage_id int NOT NULL,
+    name char(255) NOT NULL,
+    counter int NOT NULL,
+    type int,
+    price float,
+    production_date date NOT NULL,
+    receipt_date date NOT NULL,
+    overdue_date date,
+    PRIMARY KEY (product_id),
+    FOREIGN KEY (supply_item_id) REFERENCES Supply_items(supply_item_id),
+    FOREIGN KEY (storage_id) REFERENCES Storages(storage_id)
+);
+
+INSERT INTO Suppliers (supplier_id, company_name, contact, phone, supplier_key)
+VALUES
+    (1, 'Auchen RETAIL Russia', 'Anna Bakhtina', '89095327274', 'dyacsjwUNBJ7JqVsG4rZRcatokRh87'),
+    (2, 'Pyaterochka', 'Support operator', '88007700400', 'ETpYpu7ojHji77gZj5LJX8qVF7Aq2v'),
+    (3, 'Leroy Merlin', 'Olga Guscha', '89607945314', 'dAqQkX5mfjMmRUeTpcs98Ga7tT3Rno');
+
+-- Ашан сделал поставку мяса
+-- Пятёрочка сделала поставку овощей
+-- Леруа мерлен сделала поставку материалов
+INSERT INTO Supplies (supply_id, supplier_id, name, total_price)
+VALUES
+    (1, 1, 'Meat', 48020.00),
+    (2, 2, 'Vegetables', 20000.00),
+    (3, 3, 'Materials', 589000.00);
+
+-- 0 без информации
+-- 1 морозилка
+-- 4 сухое помещение
+-- 8 холодильник
+-- 16 помещение повышенной влажности
+-- 32 улица
+-- 64 улица с навесом
+-- 128 хрупкое
+INSERT INTO Supply_items (supply_item_id, supply_id, name, price, counter, type, production_date, overdue_date)
+VALUES
+    (1, 1, 'Chilled pork carbonade', 380.00, 10, 8, '2023-10-01', '2023-11-01'),
+    (2, 1, 'Chilled boneless beef shoulder', 660.00, 67, 8, '2023-10-01', '2023-12-01'),
+    (3, 3, 'Item3', 20.00, 40, 1, '2023-03-01', '2023-04-01');
+
+INSERT INTO Storages (storage_id, valid_product_types, storage_capacity, storage_max_capacity)
+VALUES
+    (1, 4, 100.0, 150.0),
+    (2, 8, 150.0, 200.0),
+    (3, 16, 200.0, 250.0);
+
+INSERT INTO Products (product_id, supply_item_id, storage_id, name, counter, type, price, production_date, receipt_date, overdue_date)
+VALUES
+    (1, 1, 1, 'Product1', 20, 1, 12.50, '2023-01-01', '2023-01-15', '2023-02-01'),
+    (2, 2, 2, 'Product2', 15, 2, 18.75, '2023-02-01', '2023-02-15', '2023-03-01'),
+    (3, 3, 3, 'Product3', 25, 1, 25.00, '2023-03-01', '2023-03-15', '2023-04-01');
+
+INSERT INTO Clients (client_id, name, contact, phone, address, client_key)
+VALUES
+    (1, 'IE Ivanov P.M.', 'Ivanov Petr', '89137452356', 'c. Novosibirk, s. Polevaya, b. 3', 'TX2syiGzGKn8XBgxM6dN5bPUJdi1A8'),
+    (2, 'IE Bobrov A.S.', 'Bobrov Alexey', '89092346543', 'c. Berdsk, s. Gogolya, b. 12', 'jBn28fiHJaQfk8xFxNzXrZHE98NQGh'),
+    (3, 'OOO Stroyka&Tochka', 'Manager Martytov Amar', '890990989098', 'Address3', 'vV5yCAGF0mKohDnaGN5P5PZd4ZUu6f');
+
+INSERT INTO Orders (order_id, client_id, name)
+VALUES
+    (1, 1, 'Order1'),
+    (2, 2, 'Order2'),
+    (3, 3, 'Order3');
+
+INSERT INTO Customers (order_item_id, product_id, order_id, counter, price)
+VALUES
+    (1, 1, 1, 5, 62.50),
+    (2, 2, 2, 3, 56.25),
+    (3, 3, 3, 8, 200.00);
