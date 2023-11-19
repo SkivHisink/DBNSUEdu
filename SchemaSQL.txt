@@ -70,7 +70,7 @@ CREATE TABLE Orders (
     PRIMARY KEY (order_id)
 );
 
-CREATE TABLE Customers (
+CREATE TABLE Order_items (
     order_item_id INT NOT NULL,
     product_id INT NOT NULL REFERENCES Products(product_id),
     order_id INT NOT NULL REFERENCES Orders(order_id),
@@ -146,7 +146,7 @@ VALUES
     (2, 2, 'Order2'),
     (3, 3, 'Order3');
 
-INSERT INTO Customers (order_item_id, product_id, order_id, counter, price)
+INSERT INTO Order_items (order_item_id, product_id, order_id, counter, price)
 VALUES
     (1, 1, 1, 5, 62.50),
     (2, 2, 2, 3, 56.25),
