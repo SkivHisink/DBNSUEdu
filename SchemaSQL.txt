@@ -12,29 +12,27 @@ CREATE TABLE Suppliers (
 
 CREATE TABLE Supplies (
     supply_id INT NOT NULL,
-    supplier_id INT NOT NULL,
+    supplier_id INT NOT NULL REFERENCES Suppliers(supplier_id),
     name CHAR(50) NOT NULL,
     total_price FLOAT NOT NULL,
-    PRIMARY KEY (supply_id),
-    FOREIGN KEY (supplier_id) REFERENCES Suppliers(supplier_id)
+    PRIMARY KEY (supply_id)
 );
 
 CREATE TABLE Supply_items (
     supply_item_id INT NOT NULL,
-    supply_id INT NOT NULL,
+    supply_id INT NOT NULL REFERENCES Supplies(supply_id),
     name CHAR(255) NOT NULL,
     price FLOAT,
     counter INT NOT NULL,
-    type INT,
+    type CHAR(10) NOT NULL,
     production_date DATE NOT NULL,
     overdue_date DATE,
-    PRIMARY KEY (supply_item_id),
-    FOREIGN KEY (supply_id) REFERENCES Supplies(supply_id)
+    PRIMARY KEY (supply_item_id)
 );
 
 CREATE TABLE Storages (
     storage_id INT NOT NULL,
-    valid_product_types INT NOT NULL,
+    storage_type CHAR(30) NOT NULL,
     storage_capacity FLOAT NOT NULL,
     storage_max_capacity FLOAT NOT NULL,
     PRIMARY KEY (storage_id)
@@ -42,18 +40,16 @@ CREATE TABLE Storages (
 
 CREATE TABLE Products (
     product_id INT NOT NULL,
-    supply_item_id INT NOT NULL,
-    storage_id INT NOT NULL,
+    supply_item_id INT NOT NULL REFERENCES Supply_items(supply_item_id),
+    storage_id INT NOT NULL REFERENCES Storages(storage_id),
     name CHAR(255) NOT NULL,
     counter INT NOT NULL,
-    type INT,
+    type CHAR(10) NOT NULL,
     price FLOAT,
     production_date DATE NOT NULL,
     receipt_date DATE NOT NULL,
     overdue_date DATE,
-    PRIMARY KEY (product_id),
-    FOREIGN KEY (supply_item_id) REFERENCES Supply_items(supply_item_id),
-    FOREIGN KEY (storage_id) REFERENCES Storages(storage_id)
+    PRIMARY KEY (product_id)
 );
 
 CREATE TABLE Clients (
@@ -69,37 +65,32 @@ CREATE TABLE Clients (
 
 CREATE TABLE Orders (
     order_id INT NOT NULL,
-    client_id INT NOT NULL,
+    client_id INT NOT NULL REFERENCES Clients(client_id),
     name CHAR(255) NOT NULL,
-    PRIMARY KEY (order_id),
-    FOREIGN KEY (client_id) REFERENCES Clients(client_id)
+    PRIMARY KEY (order_id)
 );
 
 CREATE TABLE Customers (
     order_item_id INT NOT NULL,
-    product_id INT NOT NULL,
-    order_id INT NOT NULL,
+    product_id INT NOT NULL REFERENCES Products(product_id),
+    order_id INT NOT NULL REFERENCES Orders(order_id),
     counter INT NOT NULL,
     price FLOAT NOT NULL,
-    PRIMARY KEY (order_item_id),
-    FOREIGN KEY (product_id) REFERENCES Products(product_id),
-    FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+    PRIMARY KEY (order_item_id)
 );
 
 CREATE TABLE Product (
     product_id int NOT NULL,
-    supply_item_id int NOT NULL,
-    storage_id int NOT NULL,
+    supply_item_id int NOT NULL REFERENCES Supply_items(supply_item_id),
+    storage_id int NOT NULL REFERENCES Storages(storage_id),
     name char(255) NOT NULL,
     counter int NOT NULL,
-    type int,
+    type CHAR(10) NOT NULL,
     price float,
     production_date date NOT NULL,
     receipt_date date NOT NULL,
     overdue_date date,
-    PRIMARY KEY (product_id),
-    FOREIGN KEY (supply_item_id) REFERENCES Supply_items(supply_item_id),
-    FOREIGN KEY (storage_id) REFERENCES Storages(storage_id)
+    PRIMARY KEY (product_id)
 );
 
 INSERT INTO Suppliers (supplier_id, company_name, contact, phone, supplier_key)
@@ -117,31 +108,31 @@ VALUES
     (2, 2, 'Vegetables', 20000.00),
     (3, 3, 'Materials', 589000.00);
 
--- 0 без информации
--- 1 морозилка
--- 4 сухое помещение
--- 8 холодильник
--- 16 помещение повышенной влажности
--- 32 улица
--- 64 улица с навесом
--- 128 хрупкое
+-- A без информации
+-- B морозилка
+-- C сухое помещение
+-- D холодильник
+-- E помещение повышенной влажности
+-- F улица
+-- G улица с навесом
+-- H хрупкое
 INSERT INTO Supply_items (supply_item_id, supply_id, name, price, counter, type, production_date, overdue_date)
 VALUES
-    (1, 1, 'Chilled pork carbonade', 380.00, 10, 8, '2023-10-01', '2023-11-01'),
-    (2, 1, 'Chilled boneless beef shoulder', 660.00, 67, 8, '2023-10-01', '2023-12-01'),
-    (3, 3, 'Item3', 20.00, 40, 1, '2023-03-01', '2023-04-01');
+    (1, 1, 'Chilled pork carbonade', 380.00, 10, 'D', '2023-10-01', '2023-11-01'),
+    (2, 1, 'Chilled boneless beef shoulder', 660.00, 67, 'D', '2023-10-01', '2023-12-01'),
+    (3, 3, 'Item3', 20.00, 40, 'A', '2023-03-01', '2023-04-01');
 
-INSERT INTO Storages (storage_id, valid_product_types, storage_capacity, storage_max_capacity)
+INSERT INTO Storages (storage_id, storage_type, storage_capacity, storage_max_capacity)
 VALUES
-    (1, 4, 100.0, 150.0),
-    (2, 8, 150.0, 200.0),
-    (3, 16, 200.0, 250.0);
+    (1, 'A', 100.0, 150.0),
+    (2, 'B', 150.0, 200.0),
+    (3, 'G', 200.0, 250.0);
 
 INSERT INTO Products (product_id, supply_item_id, storage_id, name, counter, type, price, production_date, receipt_date, overdue_date)
 VALUES
-    (1, 1, 1, 'Product1', 20, 1, 12.50, '2023-01-01', '2023-01-15', '2023-02-01'),
-    (2, 2, 2, 'Product2', 15, 2, 18.75, '2023-02-01', '2023-02-15', '2023-03-01'),
-    (3, 3, 3, 'Product3', 25, 1, 25.00, '2023-03-01', '2023-03-15', '2023-04-01');
+    (1, 1, 1, 'Product1', 20, 'D', 12.50, '2023-01-01', '2023-01-15', '2023-02-01'),
+    (2, 2, 2, 'Product2', 15, 'A', 18.75, '2023-02-01', '2023-02-15', '2023-03-01'),
+    (3, 3, 3, 'Product3', 25, 'B', 25.00, '2023-03-01', '2023-03-15', '2023-04-01');
 
 INSERT INTO Clients (client_id, name, contact, phone, address, client_key)
 VALUES
