@@ -97,7 +97,11 @@ INSERT INTO Suppliers (supplier_id, company_name, contact, phone, supplier_key)
 VALUES
     (1, 'Auchen RETAIL Russia', 'Anna Bakhtina', '89095327274', 'dyacsjwUNBJ7JqVsG4rZRcatokRh87'),
     (2, 'Pyaterochka', 'Support operator', '88007700400', 'ETpYpu7ojHji77gZj5LJX8qVF7Aq2v'),
-    (3, 'Leroy Merlin', 'Olga Guscha', '89607945314', 'dAqQkX5mfjMmRUeTpcs98Ga7tT3Rno');
+    (3, 'Leroy Merlin', 'Olga Guscha', '89607945314', 'dAqQkX5mfjMmRUeTpcs98Ga7tT3Rno'),
+    (4, 'Sber', 'Pavel Kartoplin', '89069068257', 'crCGr51Bog3Eu8yYoo46sXLyVCCYHu'),
+    (5, 'citilink', 'Natalia', '89607833532', 'iPYugCXTNjhE6RmE181FVkyTo23ZIC'),
+    (6, 'dns-shop', 'Grishina Ekaterina Alexandrovna', '89529122573', 'CmoAFQy4DPg7C4NP8Sabgt4hbO6J1R'),
+    (7, 'mts', 'specialist po podbory personala', '89607843662', 'fA0Upn2qV5YhNNhmQMlL8Ht34xkyEn');
 
 -- Ашан сделал поставку мяса
 -- Пятёрочка сделала поставку овощей
@@ -106,7 +110,8 @@ INSERT INTO Supplies (supply_id, supplier_id, name, total_price)
 VALUES
     (1, 1, 'Meat', 48020.00),
     (2, 2, 'Vegetables', 20000.00),
-    (3, 3, 'Materials', 589000.00);
+    (3, 3, 'Materials', 589000.00),
+    (4, 3, 'Bear', 800000);
 
 -- A без информации
 -- B морозилка
@@ -116,21 +121,33 @@ VALUES
 -- F улица
 -- G улица с навесом
 -- H хрупкое
+-- Цена указана за единицу товара!
+-- 
 INSERT INTO Supply_items (supply_item_id, supply_id, name, price, counter, type, production_date, overdue_date)
 VALUES
     (1, 1, 'Chilled pork carbonade', 380.00, 10, 'D', '2023-10-01', '2023-11-01'),
     (2, 1, 'Chilled boneless beef shoulder', 660.00, 67, 'D', '2023-10-01', '2023-12-01'),
-    (3, 3, 'Item3', 20.00, 40, 'A', '2023-03-01', '2023-04-01');
+    (3, 4, 'Bitter', 45.00, 40, 'D', '2023-03-01', '2023-04-01'),
+    (4, 4, 'Lambic', 56.00, 40, 'D', '2023-03-01', '2023-04-01'),
+    (5, 4, 'Old ale', 38.00, 40, 'D', '2023-03-01', '2023-04-01'),
+    (6, 4, 'Weissbier', 54.00, 40, 'D', '2023-03-01', '2023-04-01'),
+    (7, 4, 'Pale ale', 35.00, 40, 'D', '2023-03-01', '2023-04-01'),
+    (8, 4, 'Hefeweizen', 28.00, 40, 'D', '2023-03-01', '2023-04-01'),
+    (9, 4, 'Golden/Summer ale', 35.00, 40, 'D', '2023-03-01', '2023-04-01'),
+    ;
 
 INSERT INTO Storages (storage_id, storage_type, storage_capacity, storage_max_capacity)
 VALUES
     (1, 'A', 100.0, 150.0),
     (2, 'B', 150.0, 200.0),
-    (3, 'G', 200.0, 250.0);
+    (3, 'G', 200.0, 250.0),
+    (4, 'F', 2500.0, 2500.0),
+    (5, 'CH', 30.0, 42.0),
+    (6, 'D', 500.0, 600.0);
 
 INSERT INTO Products (product_id, supply_item_id, storage_id, name, counter, type, price, production_date, receipt_date, overdue_date)
 VALUES
-    (1, 1, 1, 'Product1', 20, 'D', 12.50, '2023-01-01', '2023-01-15', '2023-02-01'),
+    (1, 1, 6, 'Bear', 20, 'D', 12.50, '2023-01-01', '2023-01-15', '2023-02-01'),
     (2, 2, 2, 'Product2', 15, 'A', 18.75, '2023-02-01', '2023-02-15', '2023-03-01'),
     (3, 3, 3, 'Product3', 25, 'B', 25.00, '2023-03-01', '2023-03-15', '2023-04-01');
 
@@ -142,7 +159,7 @@ VALUES
 
 INSERT INTO Orders (order_id, client_id, name)
 VALUES
-    (1, 1, 'Order1'),
+    (1, 1, 'Bear'),
     (2, 2, 'Order2'),
     (3, 3, 'Order3');
 
