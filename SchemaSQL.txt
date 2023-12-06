@@ -101,17 +101,20 @@ VALUES
     (4, 'Sber', 'Pavel Kartoplin', '89069068257', 'crCGr51Bog3Eu8yYoo46sXLyVCCYHu'),
     (5, 'citilink', 'Natalia', '89607833532', 'iPYugCXTNjhE6RmE181FVkyTo23ZIC'),
     (6, 'dns-shop', 'Grishina Ekaterina Alexandrovna', '89529122573', 'CmoAFQy4DPg7C4NP8Sabgt4hbO6J1R'),
-    (7, 'mts', 'specialist po podbory personala', '89607843662', 'fA0Upn2qV5YhNNhmQMlL8Ht34xkyEn');
+    (7, 'mts', 'specialist po podbory personala', '89607843662', 'fA0Upn2qV5YhNNhmQMlL8Ht34xkyEn'),
+    (8, 'magnit kosmitic', 'human resource manager', '88007006303', 'esv9gyMegYBDleco2qg4J1cmMwO6DI'),
+    (9, 'krasnoe&beloe', 'Elena Magomalceva', '89612164145', '1lrAvB6wkZq5q2zL0qy5YHIgyNTnxg');
 
 -- Ашан сделал поставку мяса
 -- Пятёрочка сделала поставку овощей
 -- Леруа мерлен сделала поставку материалов
+-- Красное&Белое сделали поставку пива
 INSERT INTO Supplies (supply_id, supplier_id, name, total_price)
 VALUES
     (1, 1, 'Meat', 48020.00),
     (2, 2, 'Vegetables', 20000.00),
     (3, 3, 'Materials', 589000.00),
-    (4, 3, 'Bear', 800000);
+    (4, 9, 'Bear', 800000.00);
 
 -- A без информации
 -- B морозилка
