@@ -114,7 +114,8 @@ VALUES
     (1, 1, 'Meat', 48020.00),
     (2, 2, 'Vegetables', 20000.00),
     (3, 3, 'Materials', 589000.00),
-    (4, 9, 'Bear', 800000.00);
+    (4, 9, 'Bear', 800000.00),
+    (5, 9, 'strong alcohol', 139000.00);
 
 -- A без информации
 -- B морозилка
@@ -125,18 +126,25 @@ VALUES
 -- G улица с навесом
 -- H хрупкое
 -- Цена указана за единицу товара!
--- 
+-- Что дано:
+-- Айди, Айди поставки, реальное имя товара, цена, количество(в штуках), тип хранения, Дата производства, Дата порчи 
 INSERT INTO Supply_items (supply_item_id, supply_id, name, price, counter, type, production_date, overdue_date)
 VALUES
     (1, 1, 'Chilled pork carbonade', 380.00, 10, 'D', '2023-10-01', '2023-11-01'),
     (2, 1, 'Chilled boneless beef shoulder', 660.00, 67, 'D', '2023-10-01', '2023-12-01'),
-    (3, 4, 'Bitter', 45.00, 40, 'D', '2023-03-01', '2023-04-01'),
-    (4, 4, 'Lambic', 56.00, 40, 'D', '2023-03-01', '2023-04-01'),
-    (5, 4, 'Old ale', 38.00, 40, 'D', '2023-03-01', '2023-04-01'),
-    (6, 4, 'Weissbier', 54.00, 40, 'D', '2023-03-01', '2023-04-01'),
-    (7, 4, 'Pale ale', 35.00, 40, 'D', '2023-03-01', '2023-04-01'),
-    (8, 4, 'Hefeweizen', 28.00, 40, 'D', '2023-03-01', '2023-04-01'),
-    (9, 4, 'Golden/Summer ale', 35.00, 40, 'D', '2023-03-01', '2023-04-01'),
+    (3, 4, 'Bitter', 45.00, 40, 'D', '2023-03-01', '2024-03-01'),
+    (4, 4, 'Lambic', 56.00, 40, 'D', '2023-03-01', '2024-04-01'),
+    (5, 4, 'Old ale', 38.00, 40, 'D', '2023-03-01', '2024-02-01'),
+    (6, 4, 'Weissbier', 54.00, 40, 'D', '2023-03-01', '2024-06-01'),
+    (7, 4, 'Pale ale', 35.00, 40, 'D', '2023-03-01', '2025-03-12'),
+    (8, 4, 'Hefeweizen', 28.00, 40, 'D', '2023-03-01', '2026-04-01'),
+    (9, 4, 'Golden/Summer ale', 35.00, 40, 'D', '2023-06-01', '2027-04-11'),
+    (10, 5, 'Vodka', 500.00, 30, 'C', '2020-04-15', '2025-04-01'),
+    (11, 5, 'Whiskey', 1500.00, 46, 'C', '2011-12-22', '2024-12-22'),
+    (12, 5, 'Rum', 1000.00, 24, 'C', '2011-08-05', '2024-08-05'),
+    (13, 5, 'Tequila', 1200.00, 5, 'C', '2012-03-10', '2023-04-01'),
+    (14, 5, 'Gin', 1000.00, 13, 'C', '2015-07-18', '2028-07-18'),
+    (15, 5, 'Brandy', 1200.00, 10, 'C', '2013-02-28', '2026-02-28'),
     ;
 
 INSERT INTO Storages (storage_id, storage_type, storage_capacity, storage_max_capacity)
@@ -146,28 +154,39 @@ VALUES
     (3, 'G', 200.0, 250.0),
     (4, 'F', 2500.0, 2500.0),
     (5, 'CH', 30.0, 42.0),
-    (6, 'D', 500.0, 600.0);
+    (6, 'D', 312.0, 600.0),
+    (7, 'C', 280.0, 300.0);
 
 INSERT INTO Products (product_id, supply_item_id, storage_id, name, counter, type, price, production_date, receipt_date, overdue_date)
 VALUES
-    (1, 1, 6, 'Bear', 20, 'D', 12.50, '2023-01-01', '2023-01-15', '2023-02-01'),
-    (2, 2, 2, 'Product2', 15, 'A', 18.75, '2023-02-01', '2023-02-15', '2023-03-01'),
-    (3, 3, 3, 'Product3', 25, 'B', 25.00, '2023-03-01', '2023-03-15', '2023-04-01');
+    (1, 1, 6, 'Chilled pork carbonade', 5, 'D', 400.00, '2023-01-01', '2023-01-15', '2023-02-01'),
+    (2, 3, 6, 'Baltica Bitter', 15, 'D', 55.00, '2023-03-01', '2023-04-15', '2024-03-01'),
+    (3, 13, 7, 'Sierra Tequila', 2, 'C', 1500.00, '2012-03-10', '2023-05-10', '2023-04-01'), 
+    (4, 13, 7, 'Don Julio Tequila', 3, 'C', 3000.00, '2011-05-11', '2');
 
 INSERT INTO Clients (client_id, name, contact, phone, address, client_key)
 VALUES
     (1, 'IE Ivanov P.M.', 'Ivanov Petr', '89137452356', 'c. Novosibirk, s. Polevaya, b. 3', 'TX2syiGzGKn8XBgxM6dN5bPUJdi1A8'),
     (2, 'IE Bobrov A.S.', 'Bobrov Alexey', '89092346543', 'c. Berdsk, s. Gogolya, b. 12', 'jBn28fiHJaQfk8xFxNzXrZHE98NQGh'),
-    (3, 'OOO Stroyka&Tochka', 'Manager Martytov Amar', '890990989098', 'Address3', 'vV5yCAGF0mKohDnaGN5P5PZd4ZUu6f');
+    (3, 'OOO Stroyka&Tochka', 'Manager Martytov Amar', '890990989098', 'Address3', 'vV5yCAGF0mKohDnaGN5P5PZd4ZUu6f'),
+    (4, 'IE Petrov S.S.', 'Petrov Sergey Sergeevich', '89137562012', 'c. Novosibirsk, s. Bol'shevistskaya, b. 123', 'LIFajsSLAoR08ejIzjf0Qi21U7F3Ox'),
+    (5, 'John&Co', 'John Salivan', '89993241250', 'c. Novosibirsk, s. Nizhegorodskaya, b. 24', 'gTKsJuCrt33KfC7MJefPdREcmJFsdz'),
+    ;
 
 INSERT INTO Orders (order_id, client_id, name)
 VALUES
     (1, 1, 'Bear'),
-    (2, 2, 'Order2'),
-    (3, 3, 'Order3');
+    (2, 2, 'SpecialOrder'),
+    (3, 3, 'Promotional Products'),
+    (4, 3, 'Happy Christmas Party'),
+    (5, 5, 'Some Staff for selling'),
+    ;
 
+-- Айди айтема, айди продукта, айди заказа, количество продукта, итоговая цена за продукт
 INSERT INTO Order_items (order_item_id, product_id, order_id, counter, price)
 VALUES
-    (1, 1, 1, 5, 62.50),
-    (2, 2, 2, 3, 56.25),
-    (3, 3, 3, 8, 200.00);
+    (1, 2, 1, 10, 550.00),
+    (2, 1, 1, 1, 400.00),
+    (3, 3, 3, 2, 0.00), -- предоставлено бесплатно в рекламных целях
+    (4, 4, 4, 2, 6000.00),
+    ;
