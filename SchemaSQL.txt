@@ -79,20 +79,6 @@ CREATE TABLE Order_items (
     PRIMARY KEY (order_item_id)
 );
 
-CREATE TABLE Product (
-    product_id int NOT NULL,
-    supply_item_id int NOT NULL REFERENCES Supply_items(supply_item_id),
-    storage_id int NOT NULL REFERENCES Storages(storage_id),
-    name char(255) NOT NULL,
-    counter int NOT NULL,
-    type CHAR(10) NOT NULL,
-    price float,
-    production_date date NOT NULL,
-    receipt_date date NOT NULL,
-    overdue_date date,
-    PRIMARY KEY (product_id)
-);
-
 INSERT INTO Suppliers (supplier_id, company_name, contact, phone, supplier_key)
 VALUES
     (1, 'Auchen RETAIL Russia', 'Anna Bakhtina', '89095327274', 'dyacsjwUNBJ7JqVsG4rZRcatokRh87'),
@@ -187,4 +173,5 @@ VALUES
     (1, 2, 1, 10, 550.00),
     (2, 1, 1, 1, 400.00),
     (3, 3, 3, 2, 0.00), -- предоставлено бесплатно в рекламных целях
-    (4, 4, 4, 2, 6000.00);
+    (4, 4, 4, 2, 6000.00),
+    (5, 1, 1, 10, 4000.00); -- было 400, но т.к. единица стоит 400, то 400*10=4000
