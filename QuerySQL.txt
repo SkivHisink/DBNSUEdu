@@ -1,8 +1,9 @@
+-- Query#1
 USE ProductSklad;
 -- Вывести клиентов с телефонными номерами МТС
 
 -- Написали несколько вариантов записи номера, а также с другого региона
-
+-- Query#2
 SELECT * FROM Clients
 WHERE phone LIKE '8914%' OR 
 phone LIKE '+7914%' OR 
@@ -14,6 +15,7 @@ phone LIKE '7913%';
 -- Вывести клиента с максимальным средним чеком
 
 
+-- Query#3
 SELECT c.client_id, c.name, AVG(oi.price) AS average_order_price
 FROM Clients c -- Переобозначили для простоты написания
 JOIN Orders o ON c.client_id = o.client_id -- Переобозначили для простоты написания
@@ -23,14 +25,30 @@ ORDER BY average_order_price DESC
 LIMIT 1; -- Можем убрать если хотим посмотреть всех :DATABASE
 
 -- Версия 2
-
+-- Средний чек = сумма за ордер айтемы / кол-во ордерайтемов
+-- Query#4
 SELECT o.order_id, c.client_id, c.name AS client_name, AVG(oi.price) AS average_order_price
 FROM Orders o
 JOIN Clients c ON o.client_id = c.client_id
 JOIN Order_items oi ON o.order_id = oi.order_id
 GROUP BY o.order_id
-ORDER BY average_order_price DESC
-LIMIT 1; -- Можем убрать если хотим посмотреть всех :DATABASE
+ORDER BY average_order_price DESC;
+--LIMIT 1; -- Можем убрать если хотим посмотреть всех :DATABASE
+
+-- Версия 3
+-- Средний чек = среднее по ордеру ( цена за ордер айтем / количество айтемов)
+-- Query#5
+SELECT 
+    O.order_id,
+    C.client_id,
+    C.name AS client_name,
+    AVG(OI.price / OI.counter) AS average_order_price
+FROM Clients C
+JOIN Orders O ON C.client_id = O.client_id
+JOIN Order_items OI ON O.order_id = OI.order_id
+GROUP BY O.order_id, C.client_id
+ORDER BY average_order_price DESC;
+--LIMIT 1;
 
 -- Вывести продукты с их прибыльностью (общая маржинальная прибыль за всё время работы) по убыванию прибыльности
 
@@ -50,23 +68,23 @@ JOIN
 ORDER BY
     profit DESC;
 
-
--- Версия 2 (пока не работает)
+-- Версия 2
+-- Теперь как и нужно было по условию полная маржа по каждому продукту, а не по позиции заказа
 SELECT
-    P.product_id,
-    P.name AS product_name,
-    SUM(OI.price) AS total_sales,
-    SI.price * OI.counter AS total_cost,
-    SUM(OI.price - SI.price* OI.counter) AS total_profit
+    p.product_id,
+    p.name AS product_name,
+    SUM(oi.counter) AS solded_amount,
+    SUM(oi.price) AS total_revenue,
+    SUM(oi.price - oi.counter * ( si.price)) AS total_profit
 FROM
-    Products AS P
+    Products p
 JOIN
-    Supply_items AS SI ON P.supply_item_id = SI.supply_item_id
+    Order_items oi ON p.product_id = oi.product_id
 JOIN
-    Order_items AS OI ON P.product_id = OI.product_id
+    Orders o ON oi.order_id = o.order_id
+JOIN
+    Supply_items si ON p.supply_item_id = si.supply_item_id
 GROUP BY
-    P.product_id, P.name
+    p.product_id, p.name, p.type
 ORDER BY
     total_profit DESC;
-ORDER BY average_order_price DESC
-LIMIT 1; -- Можем убрать если хотим посмотреть всех :DATABASE
