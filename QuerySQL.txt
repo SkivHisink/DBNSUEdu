@@ -18,26 +18,6 @@ SELECT c.client_id, c.name, AVG(oi.price) AS average_order_price
 FROM Clients c -- Переобозначили для простоты написания
 JOIN Orders o ON c.client_id = o.client_id -- Переобозначили для простоты написания
 JOIN Order_items oi ON o.order_id = oi.order_id
-GROUP BY c.client_id, c.nameUSE ProductSklad;
--- Вывести клиентов с телефонными номерами МТС
-
--- Написали несколько вариантов записи номера, а также с другого региона
-
-SELECT * FROM Clients
-WHERE phone LIKE '8914%' OR 
-phone LIKE '+7914%' OR 
-phone LIKE '7914%' OR 
-phone LIKE '8913%' OR
-phone LIKE '+7913%' OR
-phone LIKE '7913%';
-
--- Вывести клиента с максимальным средним чеком
-
-
-SELECT c.client_id, c.name, AVG(oi.price) AS average_order_price
-FROM Clients c -- Переобозначили для простоты написания
-JOIN Orders o ON c.client_id = o.client_id -- Переобозначили для простоты написания
-JOIN Order_items oi ON o.order_id = oi.order_id
 GROUP BY c.client_id, c.name
 ORDER BY average_order_price DESC
 LIMIT 1; -- Можем убрать если хотим посмотреть всех :DATABASE
@@ -90,21 +70,3 @@ ORDER BY
     total_profit DESC;
 ORDER BY average_order_price DESC
 LIMIT 1; -- Можем убрать если хотим посмотреть всех :DATABASE
-
--- Вывести продукты с их прибыльностью (общая маржинальная прибыль за всё время работы) по убыванию прибыльности
-
-SELECT
-    P.product_id,
-    P.name AS product_name,
-    OI.counter AS solded_amount, -- Добавил количество товаров для себя, если есть необходимост можем убрать
-    OI.price AS total_revenue,
-    SI.price * OI.counter AS total_cost,
-    (OI.price) - (SI.price * OI.counter) AS profit
-FROM
-    Order_items OI
-JOIN
-    Products P ON OI.product_id = P.product_id
-JOIN
-    Supply_items SI ON P.supply_item_id = SI.supply_item_id
-ORDER BY
-    profit DESC;
