@@ -177,3 +177,14 @@ VALUES
     (5, 4, 3, 2, 6000.00),
     (6, 1, 1, 10, 4000.00),
     (7, 2, 4, 2, 1000);
+
+-- ИНДЕКСЫ
+-- Для запроса №1
+-- Удобно для работы с номерами +7***, но менее удобно для работы с 8***
+CREATE INDEX idx_clients_phone ON Clients(phone(5));
+-- Для запроса №2
+-- Мм
+CREATE INDEX idx_order_items_order_id ON Order_items(order_id);
+-- Для запроса №3
+-- 
+CREATE INDEX idx_order_items_product_id ON Order_items(product_id);
