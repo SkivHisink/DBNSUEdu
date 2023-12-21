@@ -50,6 +50,23 @@ GROUP BY O.order_id, C.client_id
 ORDER BY average_order_price DESC;
 --LIMIT 1;
 
+-- Версия 4
+-- Query#6
+SELECT
+    c.client_id,
+    c.name AS client_name,
+    SUM(oi.price) / COUNT(DISTINCT o.order_id) AS average_order_price
+FROM
+    Clients c
+JOIN
+    Orders o ON c.client_id = o.client_id
+JOIN
+    Order_items oi ON o.order_id = oi.order_id
+GROUP BY
+    c.client_id, c.name
+ORDER BY
+    average_order_price DESC
+LIMIT 1;
 -- Вывести продукты с их прибыльностью (общая маржинальная прибыль за всё время работы) по убыванию прибыльности
 
 SELECT
